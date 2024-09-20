@@ -38,11 +38,14 @@ class Scene:
             print("Found transforms_train.json file, assuming Blender data set!")
             scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval)
         elif ".pickle" in args.source_path:
-            print("Loading pickle file for X-ray rendering")
+            print(f"Loading pickle file for X-ray rendering, train_num: {args.train_num}, add_num: {args.add_num}")
             scene_info, self.volume_positions, self.image_3d = sceneLoadTypeCallbacks["Xray"](path = args.source_path, eval = args.eval, interval = args.interval, add_num = args.add_num, train_num = args.train_num)
         else:
             assert False, "Could not recognize scene type!"
 
+        print('number in scene_info.test_cameras:', len(scene_info.test_cameras), '\n',
+              'number in scene_info.train_cameras:', len(scene_info.train_cameras), '\n',
+              'number in scene_info.add_cameras:', len(scene_info.add_cameras), '\n' )
         if not self.loaded_iter:
             with open(scene_info.ply_path, 'rb') as src_file, open(os.path.join(self.model_path, "input.ply") , 'wb') as dest_file:
                 dest_file.write(src_file.read())
@@ -52,6 +55,9 @@ class Scene:
                 camlist.extend(scene_info.test_cameras)
             if scene_info.train_cameras:
                 camlist.extend(scene_info.train_cameras)
+            #if scene_info.add_cameras:
+            #    camlist.extend(scene_info.add_cameras)
+            print('total cam length:', len(camlist))
             for id, cam in enumerate(camlist):
                 json_cams.append(camera_to_JSON(id, cam))
             with open(os.path.join(self.model_path, "cameras.json"), 'w') as file:

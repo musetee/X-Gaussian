@@ -374,8 +374,41 @@ def Xray_readCamerasFromTransforms(path, type = 'train'):
 
 
 
-def Xray_readCamerasFromTransforms_addtional(path, add_num = 50):
+def Xray_readCamerasFromTransforms_addtional_linspace(path, add_num = 50):
+    
+    cam_infos = []
+    with open(path, "rb") as handle:
+        data = pickle.load(handle)
+    geometry = ConeGeometry(data)
 
+    type = 'train'
+    h, w = data[type]["projections"][0].shape
+    projs = np.zeros((add_num, h, w))
+    angles = np.linspace(0, np.pi, add_num)
+    fovx = focal2fov(geometry.DSD, w)
+    
+
+    for idx, image_arr in enumerate(projs):
+
+        c2w = angle2pose(geometry.DSO,angles[idx])
+        image_name = str(idx)
+        w2c = np.linalg.inv(c2w)
+        R = np.transpose(w2c[:3,:3]) 
+        T = w2c[:3, 3]
+
+        image = image_arr
+        angle = angles[idx]
+
+        fovy = focal2fov(geometry.DSD, h)
+        FovY = fovy 
+        FovX = fovx
+
+        cam_infos.append(CameraInfo_Xray(uid=idx, R=R, T=T, FovY=FovY, FovX=FovX, image=image, image_name=image_name, width=image.shape[0], height=image.shape[1], angle=angle))
+            
+    return cam_infos
+
+def Xray_readCamerasFromTransforms_addtional(path, add_num = 50):
+    # generate anngles randomly between 0 and np.pi
     cam_infos = []
     with open(path, "rb") as handle:
         data = pickle.load(handle)
@@ -407,15 +440,13 @@ def Xray_readCamerasFromTransforms_addtional(path, add_num = 50):
             
     return cam_infos
 
-
-
 def Xray_readNerfSyntheticInfo(path, eval, cube_pcd_init = True, interval = 2, add_num = 50, train_num = 50):
     print("Reading Training Transforms")
     train_cam_infos = Xray_readCamerasFromTransforms(path, type = "train")
     print("Reading Test Transforms")
     test_cam_infos = Xray_readCamerasFromTransforms(path, type = "val")
-    print("creating additional camera poses")
-    add_cam_infos = Xray_readCamerasFromTransforms_addtional(path, add_num = add_num)
+    print(f"creating additional camera poses, add_num = {add_num}")
+    add_cam_infos = Xray_readCamerasFromTransforms_addtional_linspace(path, add_num = add_num)
     
     if not eval:
         train_cam_infos.extend(test_cam_infos)
