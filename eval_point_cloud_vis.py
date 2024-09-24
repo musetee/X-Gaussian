@@ -10,7 +10,7 @@ from PIL import Image
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-def readply():
+def readply(path):
     # path = 'output/foot/2024_01_10_23_04_44/point_cloud/iteration_30000/point_cloud.ply'
     plydata = PlyData.read(path)
     xyz = np.stack((np.asarray(plydata.elements[0]["x"]),
@@ -91,5 +91,5 @@ if __name__ == '__main__':
     path = r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\point_cloud\iteration_20000\point_cloud.ply'
     # save_path = f'point_cloud_visualization/{scene}/'
     os.makedirs(save_path, exist_ok=True)
-    xyz, opacities,xyz_and_opacities=readply()
+    xyz, opacities,xyz_and_opacities=readply(path)
     savetomat(xyz_and_opacities)
