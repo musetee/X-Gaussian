@@ -95,7 +95,7 @@ def visualize_volume_with_slider(volume, slice_dimension=0):
 
 def load_example_dataset():
     # Example Usage:
-    file_path =r"data\abdomen_50.pickle"
+    file_path =r"data\foot_50.pickle"
     data = load_pickle_volume(file_path)
 
     for key, value in data.items():
@@ -143,4 +143,5 @@ def load_view_synthesis():
     visualize_volume_with_slider(projections, slice_dimension=0)
 
 if __name__=='__main__':
-    load_view_synthesis()
+    load_example_dataset()
+    #load_view_synthesis()
