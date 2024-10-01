@@ -93,9 +93,16 @@ def visualize_volume_with_slider(volume, slice_dimension=0):
     
     plt.show()
 
-def load_example_dataset():
+def load_example_dataset_train(file_path =r"data\foot_50.pickle"):
+    data = load_pickle_volume(file_path)
+    train_data = data.get('train') # 'angles', 'projections'
+    projections_train = train_data.get('projections')
+    print('train dataset projection shape:', projections_train.shape)
+    visualize_volume_with_slider(projections_train, slice_dimension=0)
+
+def load_example_dataset(file_path =r"data\foot_50.pickle"):
     # Example Usage:
-    file_path =r"data\foot_50.pickle"
+    
     data = load_pickle_volume(file_path)
 
     for key, value in data.items():
@@ -131,8 +138,7 @@ def load_example_dataset():
     # visualize_volume_with_slider(image_volume, slice_dimension=2)
     visualize_volume_with_slider(projections_val, slice_dimension=0)
 
-def load_view_synthesis():
-    file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'
+def load_view_synthesis(file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'):
     #file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_test_50\gt_images.pickle'
     data = load_pickle_volume(file_path)
 
@@ -144,5 +150,5 @@ def load_view_synthesis():
     visualize_volume_with_slider(projections, slice_dimension=0)
     return projections, angles
 if __name__=='__main__':
-    _,_ = load_view_synthesis()
-    #load_example_dataset()
+    load_example_dataset_train(r"data\data_Th1.pickle")
+    #_,_ = load_view_synthesis()
