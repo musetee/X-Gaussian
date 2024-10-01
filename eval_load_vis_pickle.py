@@ -128,11 +128,12 @@ def load_example_dataset():
     print('val dataset projection shape:', projections_val.shape)
 
     #visualize_volume(volume_val)
-    visualize_volume_with_slider(image_volume, slice_dimension=2)
+    # visualize_volume_with_slider(image_volume, slice_dimension=2)
     visualize_volume_with_slider(projections_val, slice_dimension=0)
 
 def load_view_synthesis():
-    file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000\rendered_images.pickle'
+    file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'
+    #file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_test_50\gt_images.pickle'
     data = load_pickle_volume(file_path)
 
     for key, value in data.items():
@@ -141,7 +142,7 @@ def load_view_synthesis():
     projections = data.get('projections')
     angles = data.get('angles')
     visualize_volume_with_slider(projections, slice_dimension=0)
-
+    return projections, angles
 if __name__=='__main__':
-    load_example_dataset()
-    #load_view_synthesis()
+    _,_ = load_view_synthesis()
+    #load_example_dataset()

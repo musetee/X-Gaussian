@@ -21,6 +21,21 @@ def load_dataset(file_path =r"data\foot_50.pickle"):
     print('val dataset projection shape:', projections_val.shape)
     print('val dataset angle shape:', angles_val.shape)
     return projections_val, angles_val, image_volume
+
+def load_view_synthesis(file_path =r"data\foot_50.pickle"):
+    # Example Usage:
+    val_data = load_pickle_volume(file_path)
+
+    # print('all keys in data: ' )
+    # for key, value in data.items():
+    #     print(key)
+    # Extract metadata and image
+    projections_val = val_data.get('projections')
+    angles_val = val_data.get('angles')
+    angles_val = np.array(angles_val)
+    print('val dataset projection shape:', projections_val.shape)
+    print('val dataset angle shape:', angles_val.shape)
+    return projections_val, angles_val
 from scipy.fftpack import fft, ifft
 import numpy as np
 
@@ -69,6 +84,9 @@ def backproject(projections, angles, sinogram_type = 2):
     return reconstructed_volume
 
 projections, angles, images = load_dataset(file_path =r"data\foot_50.pickle")
+
+#view_synthesis_file = r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'
+#projections, angles = load_view_synthesis(file_path =view_synthesis_file)
 print(angles)
 angles = angles / np.pi * 180
 # Assuming `angles` is the array of angles for each 2D projection
@@ -80,7 +98,7 @@ projections_cropped = projections[:,start:(start+D),:] if sinogram_type ==1 else
 VERBOSE = True
 if VERBOSE:
     visualize_volume_with_slider(projections, slice_dimension=0)
-    visualize_volume_with_slider(images, slice_dimension=2)
+    # visualize_volume_with_slider(images, slice_dimension=2)
     '''
     import matplotlib.pyplot as plt
     plt.imshow(projections[:,200,:], cmap='gray')

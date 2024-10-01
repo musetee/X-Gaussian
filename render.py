@@ -46,8 +46,8 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     rendered_images = torch.stack(rendered_images, dim=0).detach().cpu().numpy().squeeze()  # Creates a 3D volume (stack of images)
     gt_images = torch.stack(gt_images, dim=0).detach().cpu().numpy().squeeze()  # Creates a 3D volume (stack of images)
     print(rendered_images.shape)
+    
     # Save both rendered and ground truth images to a pickle file
-
     rendered_data_to_save = {
         "projections": rendered_images,
         "angles": angles
@@ -104,6 +104,7 @@ if __name__ == "__main__":
     #print(dataset.loaded_iter)
     render_sets(dataset, args.iteration, pipeline.extract(args), args.skip_train, args.skip_test, args.view_synthesis)
     
+    # render new projections and save to pickle file
     # python render.py --model_path G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41 --skip_train --skip_test --view_synthesis --add_vis_num 100
 
     '''
