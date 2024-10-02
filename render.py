@@ -106,7 +106,7 @@ if __name__ == "__main__":
     
     # render new projections and save to pickle file
     # python render.py --model_path G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41 --skip_train --skip_test --view_synthesis --add_vis_num 100
-
+    # python render.py --model_path G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41 --skip_train --skip_test --view_synthesis --add_vis_num 100
     '''
     Looking for config file in G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\cfg_args
     Config file found: G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\cfg_args

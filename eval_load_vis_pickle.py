@@ -106,11 +106,9 @@ def load_example_dataset(file_path =r"data\foot_50.pickle"):
     data = load_pickle_volume(file_path)
 
     for key, value in data.items():
-        print('all keys in data:', key)
+        print('key: ', key, ',' , 'value: ', value)
     # Extract metadata and image
     metadata = {key: value for key, value in data.items() if key != 'image' and key !='train' and key !='val'}
-    image_volume = data.get('image')
-    print('image shape:', image_volume.shape)
 
     train_data = data.get('train') # 'angles', 'projections'
     projections_train = train_data.get('projections')
@@ -129,14 +127,17 @@ def load_example_dataset(file_path =r"data\foot_50.pickle"):
     2.63893783 2.70176968 2.76460154 2.82743339 2.89026524 2.95309709
     3.01592895 3.0787608 ]
     '''
+    '''
     val_data  = data.get('val') 
     projections_val = val_data.get('projections')
     angles_val = val_data.get('angles')
     print('val dataset projection shape:', projections_val.shape)
-
-    #visualize_volume(volume_val)
-    # visualize_volume_with_slider(image_volume, slice_dimension=2)
     visualize_volume_with_slider(projections_val, slice_dimension=0)
+    
+    image_volume = data.get('image')
+    print('image shape:', image_volume.shape)
+    # visualize_volume_with_slider(image_volume, slice_dimension=2)
+    '''
 
 def load_view_synthesis(file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'):
     #file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_test_50\gt_images.pickle'
@@ -150,5 +151,6 @@ def load_view_synthesis(file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_1
     visualize_volume_with_slider(projections, slice_dimension=0)
     return projections, angles
 if __name__=='__main__':
-    load_example_dataset_train(r"data\data_Th1.pickle")
+    #load_example_dataset_train(r"data\data_Th1.pickle")
+    load_example_dataset(r"data\foot_50.pickle") # data\foot_50.pickle
     #_,_ = load_view_synthesis()
