@@ -51,8 +51,8 @@ class ModelParams(ParamGroup):
         self.eval = False
         self.dump_pickle = False
         self.interval = 8
-        self.train_num = 50
-        self.add_num = 500
+        self.train_num = 100
+        self.add_num = 100
         self.nview = 5
         super().__init__(parser, "Loading Parameters", sentinel)
         #print('add_num after super',self.add_num)

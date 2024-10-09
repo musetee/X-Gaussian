@@ -170,7 +170,7 @@ def training_report(exp_logger, iteration, Ll1, loss, l1_loss, elapsed, testing_
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Training script parameters") 
-    lp = ModelParams(parser)                      # 
+    lp = ModelParams(parser) # args.train_num args.add_num get from here               
     op = OptimizationParams(parser)
     pp = PipelineParams(parser)
     parser.add_argument('--ip', type=str, default="127.0.0.1")
@@ -179,19 +179,18 @@ if __name__ == "__main__":
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
     parser.add_argument('--config', type=str, default='config/chest.yaml', help='Path to the configuration file')
     parser.add_argument("--test_iterations", nargs="+", type=int, default=[100, 2_000, 20_000])
-    parser.add_argument("--save_iterations", nargs="+", type=int, default=[20_000,])
+    parser.add_argument("--save_iterations", nargs="+", type=int, default=[20_000, 40_000])
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[])
     parser.add_argument("--start_checkpoint", type=str, default = None)
     parser.add_argument("--gpu_id", default="0", help="gpu to use")
     args = parser.parse_args(sys.argv[1:])
-    args.save_iterations.append(args.iterations)
-
+    
     os.environ["CUDA_DEVICE_ORDER"] = 'PCI_BUS_ID'
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
 
     print("Optimizing " + args.model_path)
-
+    
     safe_state(args.quiet)
 
 
@@ -203,6 +202,12 @@ if __name__ == "__main__":
     for key, value in config.items():
         setattr(args, key, value)
 
+    args.save_iterations.append(args.iterations)
+    print("Checkpoints will be saved in: ", args.save_iterations)
+
+    args.train_num=1000
+    args.add_num=1000
+    args.nview=1000
     training(lp.extract(args), op.extract(args), pp.extract(args), args.test_iterations, args.save_iterations, args.checkpoint_iterations, args.start_checkpoint, args.debug_from)
 
     print("\nTraining complete.")

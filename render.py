@@ -49,13 +49,19 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     
     # Save both rendered and ground truth images to a pickle file
     rendered_data_to_save = {
+        "val":
+        {
         "projections": rendered_images,
         "angles": angles
+        }        
     }
 
     gt_data_to_save = {
+        "val":
+        {
         "projections": gt_images,
         "angles": angles
+        }
     }
     with open(os.path.join(model_path, name, "ours_{}".format(iteration), 'rendered_images.pickle'), 'wb') as f:
         pickle.dump(rendered_data_to_save, f)
@@ -106,7 +112,7 @@ if __name__ == "__main__":
     
     # render new projections and save to pickle file
     # python render.py --model_path G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41 --skip_train --skip_test --view_synthesis --add_vis_num 100
-    # python render.py --model_path G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41 --skip_train --skip_test --view_synthesis --add_vis_num 100
+    # python render.py --model_path F:\yang_Projects\X-Gaussian\output\schweintest\2024_10_08_22_51_22 --skip_train 
     '''
     Looking for config file in G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\cfg_args
     Config file found: G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\cfg_args

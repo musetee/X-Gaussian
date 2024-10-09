@@ -10,7 +10,7 @@ file_path = os.path.join(root, file)
 mat_data = scipy.io.loadmat(file_path)
 
 # Extract the matrix
-data = mat_data['data_Th1'].transpose(2, 0, 1)
+data = mat_data['data_Th1'].transpose(2, 1, 0)
 angles = mat_data['Angle'].squeeze()
 angles = angles / 180 * np.pi
 print(data.shape)
@@ -49,8 +49,8 @@ data_to_save = {
     },
     "val":
     {
-    "projections": data[0:49,:,:],
-    "angles": angles[0:49]
+    "projections": data,
+    "angles": angles
     },
 }
 
