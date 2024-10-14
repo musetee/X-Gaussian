@@ -86,6 +86,8 @@ def backproject(projections, angles, sinogram_type = 2):
             reconstructed_volume[:,:,i] = slice_recon
     return reconstructed_volume
 
+
+
 if __name__ == '__main__':
     D = 1 # reconstruct_slices
     start = 100
@@ -95,7 +97,6 @@ if __name__ == '__main__':
     # so for every slice, sinogram should be 1000, 1376 
     
     projections, angles, images = load_dataset(file_path =r"data\data_Th1.pickle") #foot_50
-
     #view_synthesis_file = r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'
     #projections, angles = load_view_synthesis(file_path =view_synthesis_file)
     # shape: (1000, 1376, 144)
