@@ -20,13 +20,13 @@ or visualize in matlab:
 matlab/plot3D_opacity.m
 
 # synthesize noval views
-python render.py --model_path F:\yang_Projects\X-Gaussian\output\schweintest\2024_10_08_22_51_22 
+python render.py --model_path F:\yang_Projects\X-Gaussian\output\schweintest\2024_10_22_18_50_42 --skip_test
 --skip_train
 --skip_test
 --view_synthesis --add_vis_num 100
 
 # reconstruct using generated noval views
-python fbp_recon.py
+python fbp_for_pickle.py
 
 # notes about the input pickle shape:
 the example given by the author has the shape (50, 500, 500), namely (angle_number, slice_number, detector_numbers)

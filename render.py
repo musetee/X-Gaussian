@@ -10,6 +10,7 @@ from argparse import ArgumentParser
 from arguments import ModelParams, PipelineParams, get_combined_args
 from gaussian_renderer import GaussianModel_Xray as GaussianModel
 import pickle
+import numpy as np
 def render_set(model_path, name, iteration, views, gaussians, pipeline, background):
     render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "renders")
     gts_path = os.path.join(model_path, name, "ours_{}".format(iteration), "gt")
@@ -20,6 +21,7 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     rendered_images = []  # List to store rendered images
     gt_images = []        # List to store ground truth images
     angles = []
+    print('views:', len(views))
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
         rendering = render(view, gaussians, pipeline, background)["render"]
         #print("shape of original image:", view.original_image.shape)
@@ -45,8 +47,9 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     # Convert the list of rendered images to a 3D volume by stacking along a new dimension
     rendered_images = torch.stack(rendered_images, dim=0).detach().cpu().numpy().squeeze()  # Creates a 3D volume (stack of images)
     gt_images = torch.stack(gt_images, dim=0).detach().cpu().numpy().squeeze()  # Creates a 3D volume (stack of images)
-    print(rendered_images.shape)
-    
+    angles = np.array(angles)
+    print('final rendered shape:', rendered_images.shape)
+    print('final angles shape:', angles.shape)
     # Save both rendered and ground truth images to a pickle file
     rendered_data_to_save = {
         "val":
@@ -73,7 +76,7 @@ def render_sets(dataset : ModelParams, iteration : int, pipeline : PipelineParam
     with torch.no_grad():
 
         gaussians = GaussianModel(dataset.sh_degree) # sh_degree = 3
-        scene = Scene(dataset, gaussians, load_iteration=iteration, shuffle=False)
+        scene = Scene(dataset, gaussians, load_iteration=iteration, shuffle=False) #Loading trained model at iteration, loading training/test/add cameras
 
         bg_color = [1,1,1] if dataset.white_background else [0, 0, 0]
         background = torch.tensor(bg_color, dtype=torch.float32, device="cuda")
@@ -98,13 +101,14 @@ if __name__ == "__main__":
     parser.add_argument("--view_synthesis", action="store_true")
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--add_vis_num", default=100, type=int)
-
+    
     #parser.add_argument("--model_path", type=str)
     args = get_combined_args(parser)
     print("Rendering " + args.model_path)
     
     safe_state(args.quiet)
     dataset = model.extract(args)
+    dataset.eval=True
     if args.view_synthesis:
         dataset.add_num=args.add_vis_num
     #print(dataset.loaded_iter)

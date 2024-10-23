@@ -2,17 +2,29 @@ import scipy.io
 import pickle
 import os 
 import numpy as np
+
+def preprocess(data, scalar):
+    return (data - np.min(data))/scalar
+
 root = r'./data'
-file = r'output_file_Th1_2000_1000.mat'
-save_name = 'data_Th1.pickle'
+file = r'output_file_Th1_3000_1008.mat'
+save_name = 'data_Th1_3000_1008.pickle'
 file_path = os.path.join(root, file)
 # Load the .mat file
 mat_data = scipy.io.loadmat(file_path)
 
 # Extract the matrix
+scalar = 150000.0
 data = mat_data['data_Th1'].transpose(2, 1, 0)
-angles = mat_data['Angle'].squeeze()
-angles = angles / 180 * np.pi
+print('train dataset projection before preprocess, min, max:', np.min(data), np.max(data))
+print(data.dtype)
+data = preprocess(data, scalar)
+print('train dataset projection after preprocess, min, max:', np.min(data), np.max(data)) # 0 - 0.1
+angles = mat_data['Angle'].squeeze() / 180 * np.pi
+
+data_test = mat_data['data_Th1'].transpose(2, 1, 0)
+data_test = preprocess(data_test, scalar)
+angles_test = mat_data['Angle'].squeeze() / 180 * np.pi
 print(data.shape)
 print(angles.shape)
 
@@ -22,8 +34,8 @@ print(angles.shape)
 data_to_save = {
     "numTrain": 50,
     "numVal": 50,
-    "DSD":1500.0,
-    "DSO": 1000.0,
+    "DSD":1100.0,
+    "DSO": 610.0,
     "nDetector": [512, 512],
     "dDetector": [1.0, 1.0],
     "nVoxel": [256, 256, 256],
@@ -49,10 +61,11 @@ data_to_save = {
     },
     "val":
     {
-    "projections": data,
-    "angles": angles
+    "projections": data_test,
+    "angles": angles_test
     },
 }
 
 with open(os.path.join(root, save_name), 'wb') as f:
     pickle.dump(data_to_save, f)
+    

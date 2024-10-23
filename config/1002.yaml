@@ -1,5 +1,5 @@
 scene: schweintest
-source_path: data/data_Th1.pickle
+source_path: data/data_Th1_3000_1008.pickle
 iterations: 100000
 position_lr_init: 0.000179
 position_lr_final: 0.00000179

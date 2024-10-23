@@ -1,4 +1,4 @@
-from eval_load_vis_pickle import load_pickle_volume, visualize_volume_with_slider
+from step2_load_vis_pickle import load_pickle_volume, visualize_volume_with_slider
 def load_dataset(file_path =r"data\foot_50.pickle"):
     # Example Usage:
     data = load_pickle_volume(file_path)
@@ -21,8 +21,8 @@ def load_dataset(file_path =r"data\foot_50.pickle"):
     projections_val = val_data.get('projections')
     angles_val = val_data.get('angles')
     print('val dataset projection shape:', projections_val.shape)
-    print('val dataset angle shape:', angles_val.shape)
-    print('angles_val:', angles_val)
+    #print('val dataset angle shape:', angles_val.shape)
+    print('angles_val:', angles_val[0], angles_val[-1])
     return projections_val, angles_val, image_volume
 
 def load_view_synthesis(file_path =r"data\foot_50.pickle"):
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # for example, for sinogram of shape: (1000, 1376, 144), 1000 is the angle, 1376 is detector numbers (width), 144 is the vertical slice number
     # so for every slice, sinogram should be 1000, 1376 
     
-    projections, angles, images = load_dataset(file_path =r"data\data_Th1.pickle") #foot_50
+    projections, angles, images = load_dataset(file_path =r"output\schweintest\2024_10_22_18_50_42\test\ours_100000\rendered_images.pickle") #foot_50
     #view_synthesis_file = r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'
     #projections, angles = load_view_synthesis(file_path =view_synthesis_file)
     # shape: (1000, 1376, 144)
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     # Reconstruct the 3D volume using FDK
     # projections shape: (50, 512, 512)
-    Reconstruction = False
+    Reconstruction = True
     if Reconstruction:
         volume = backproject(projections_cropped, angles, sinogram_type)
         print("Reconstructed volume shape:", volume.shape)
