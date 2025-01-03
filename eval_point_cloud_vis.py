@@ -81,15 +81,17 @@ def visualizeply(xyz, opacities):
 if __name__ == '__main__':
     from argparse import ArgumentParser, Namespace
     parser = ArgumentParser(description="save points") 
-    parser.add_argument('--scene', type=str, default="abdomen")
+    parser.add_argument('--scene', default=None)
     args = parser.parse_args()
     scene = args.scene
     method = 'XGaussian'
-    #save_path = f'G:\\projects\\X-Gaussian\\output\\{scene}_no_norm'
-    #path = f'G:\\projects\\X-Gaussian\\data\\{scene}.ply'
-    save_path = f'G:\\projects\\X-Gaussian\\output\\new_train'
-    path = r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\point_cloud\iteration_20000\point_cloud.ply'
-    # save_path = f'point_cloud_visualization/{scene}/'
+    if scene is not None:
+        save_path = f'G:\\projects\\X-Gaussian\\output\\{scene}_no_norm'
+        path = f'G:\\projects\\X-Gaussian\\data\\{scene}.ply'
+    else:
+        scene = 'schweintest'
+        save_path = r'./output/new_train'
+        path = r'F:\yang_Projects\X-Gaussian\output\schweintest\2024_10_08_22_51_22\point_cloud\iteration_100000\point_cloud.ply'
     os.makedirs(save_path, exist_ok=True)
     xyz, opacities,xyz_and_opacities=readply(path)
     savetomat(xyz_and_opacities)

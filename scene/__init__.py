@@ -31,7 +31,7 @@ class Scene:
         self.add_cameras = {}
 
 
-        print(args.source_path)
+        print("Loading pickle file for X-ray rendering, ", args.source_path)
         if os.path.exists(os.path.join(args.source_path, "sparse")):
             scene_info = sceneLoadTypeCallbacks["Colmap"](args.source_path, args.images, args.eval)
         elif os.path.exists(os.path.join(args.source_path, "transforms_train.json")):
@@ -39,6 +39,7 @@ class Scene:
             scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval)
         elif ".pickle" in args.source_path:
             print(f"Loading pickle file for X-ray rendering, train_num: {args.train_num}, add_num: {args.add_num}")
+            print(f"eval mode: {args.eval}")
             scene_info, self.volume_positions, self.image_3d = sceneLoadTypeCallbacks["Xray"](path = args.source_path, eval = args.eval, interval = args.interval, add_num = args.add_num, train_num = args.train_num)
         else:
             assert False, "Could not recognize scene type!"

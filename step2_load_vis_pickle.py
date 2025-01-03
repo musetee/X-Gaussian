@@ -106,16 +106,15 @@ def load_example_dataset(file_path =r"data\foot_50.pickle"):
     data = load_pickle_volume(file_path)
 
     for key, value in data.items():
-        print('all keys in data:', key)
+        print('key: ', key, ',' , 'value: ', value)
     # Extract metadata and image
     metadata = {key: value for key, value in data.items() if key != 'image' and key !='train' and key !='val'}
-    image_volume = data.get('image')
-    print('image shape:', image_volume.shape)
 
     train_data = data.get('train') # 'angles', 'projections'
     projections_train = train_data.get('projections')
     angles_train = train_data.get('angles')
     print('train dataset projection shape:', projections_train.shape)
+    print('train dataset projection min, max:', np.min(projections_train), np.max(projections_train))
     print('train dataset angles shape:', angles_train.shape)
     print('train dataset angles:', angles_train)
     ''' 0.06283185 = pi/50
@@ -129,15 +128,21 @@ def load_example_dataset(file_path =r"data\foot_50.pickle"):
     2.63893783 2.70176968 2.76460154 2.82743339 2.89026524 2.95309709
     3.01592895 3.0787608 ]
     '''
+    
     val_data  = data.get('val') 
     projections_val = val_data.get('projections')
     angles_val = val_data.get('angles')
     print('val dataset projection shape:', projections_val.shape)
-
-    #visualize_volume(volume_val)
-    # visualize_volume_with_slider(image_volume, slice_dimension=2)
+    print('val dataset angles shape:', angles_val.shape)
     visualize_volume_with_slider(projections_val, slice_dimension=0)
-
+    
+    #image_volume = data.get('image')
+    #print('image shape:', image_volume.shape)
+    #visualize_volume_with_slider(image_volume, slice_dimension=2)
+    
+    from scene.dataset_readers import Xray_readCamerasFromTransforms
+    test_cam_infos = Xray_readCamerasFromTransforms(file_path, type = "val")
+    
 def load_view_synthesis(file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_view_synthesis_100\rendered_images.pickle'):
     #file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_19_12_51_41\test\ours_20000_test_50\gt_images.pickle'
     data = load_pickle_volume(file_path)
@@ -149,6 +154,14 @@ def load_view_synthesis(file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_1
     angles = data.get('angles')
     visualize_volume_with_slider(projections, slice_dimension=0)
     return projections, angles
+
 if __name__=='__main__':
-    load_example_dataset_train(r"data\abdomen_50.pickle")
+    #load_example_dataset_train(r"data\data_Th1.pickle")
+    data_name = {'aneurism_50', 'foot_50', 'bonsai_50', 'engine_50', 'data_Th1', 'data_Th1_3000_1008'}
+    load_example_dataset(r"data\data_Th1_3000_1008.pickle") # data\foot_50.pickle
+    # aneurism_50 0.0 0.065076396
+    # foot 0.0 0.0790227
+    # bonsai 0.0 0.12012417
+    # engine 0.0 0.1305462
+    # data -487.64783 13519.859
     #_,_ = load_view_synthesis()
