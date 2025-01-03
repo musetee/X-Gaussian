@@ -150,5 +150,5 @@ def load_view_synthesis(file_path=r'G:\projects\X-Gaussian\output\foot\2024_09_1
     visualize_volume_with_slider(projections, slice_dimension=0)
     return projections, angles
 if __name__=='__main__':
-    load_example_dataset_train(r"data\data_Th1.pickle")
+    load_example_dataset_train(r"data\abdomen_50.pickle")
     #_,_ = load_view_synthesis()

@@ -1,11 +1,11 @@
 load_from_path = 1;
 if load_from_path==1
     clear
-    object = 'foot';
+    object = 'schweintest';
     object = strcat(object, '_no_norm');
-    input_path = 'G:\projects\X-Gaussian\output\';
-    path=strcat(input_path, object, '\');
-    load([path, object],'points');
+    input_path = 'D:\Project\X-Gaussian\data\';
+    path=[input_path, object];
+    load(path,'points');
 end 
 points_number = size(points,1);
 X=points(:,1);
